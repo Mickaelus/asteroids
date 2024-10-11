@@ -1,11 +1,18 @@
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED
-from circleshape import *
 import pygame
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED
+from circleshape import CircleShape
 
-class Player(CircleShape):
+class Player(CircleShape, pygame.sprite.Sprite):
     def __init__(self, x, y):
+        # Initialize both CircleShape and Sprite
         super().__init__(x, y, PLAYER_RADIUS)
+        pygame.sprite.Sprite.__init__(self)
         self.rotation = 0
+        
+        # Automatically add to specified groups
+        if hasattr(self.__class__, 'containers'):
+            for group in self.__class__.containers:
+                group.add(self)
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
